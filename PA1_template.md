@@ -121,7 +121,7 @@
   # make Histogram
   
   p<-ggplot(data.no.miss.by.date,aes(step.sum)) + geom_histogram(binwidth=1000,fill="grey49") + theme_bw(base_size=12)
-  p<-p+ theme(axis.text.x = element_text(angle = 90, hjust = 1,vjust=0.5)) + ylab("total steps per a day")
+  p<-p+ theme(axis.text.x = element_text(angle = 90, hjust = 1,vjust=0.5)) + xlab("total steps taken per a day")
   p<-p+geom_vline(xintercept = data.mean,colour="red")
   p<-p+geom_vline(xintercept = data.median,colour="Blue")
   p
@@ -240,7 +240,7 @@ Note that there are a number of days/intervals where there are missing values (c
 
   require(ggplot2)
   p<-ggplot(data.no.miss.by.date.impute,aes(step.sum)) + geom_histogram(binwidth=1000,fill="grey49") + theme_bw(base_size=12)
-  p<-p+ theme(axis.text.x = element_text(angle = 90, hjust = 1,vjust=0.5)) + ylab("total steps per a day")
+  p<-p+ theme(axis.text.x = element_text(angle = 90, hjust = 1,vjust=0.5)) + ylab("Count") + xlab("Total Step taken each day")
   p<-p+geom_vline(xintercept = data.mean,colour="red")
   p<-p+geom_vline(xintercept = data.median,colour="Blue")
   p
