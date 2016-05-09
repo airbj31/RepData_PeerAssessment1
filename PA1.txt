@@ -1,15 +1,12 @@
 # Reproducible Research: Peer Assignment 1
 
+
 ## Loading and preprocessing the data 
 
 1. Load the data
 
 
 ```r
-  library(knitr)
-  opts_knit$set(root.dir=normalizePath('./'))
-  opts_chunk$set(fig.path = "./figures/")
-
   ## language setting for different native language.
   Sys.setlocale(category = "LC_ALL", locale = "english")
 ```
@@ -112,30 +109,20 @@
 ```
 
 ```r
-  ## calculate median and mean for next question.
-  
-  data.mean<-mean(data.no.miss.by.date$step.sum)
-  data.median<-median(data.no.miss.by.date$step.sum)
-
-  
-  # make Histogram
-  
-  p<-ggplot(data.no.miss.by.date,aes(step.sum)) + geom_histogram(binwidth=1000,fill="grey49") + theme_bw(base_size=12)
+  p<-ggplot(data.no.miss.by.date,aes(date,step.sum)) + geom_bar(stat="identity",width=1) + theme_bw(base_size=10)
   p<-p+ theme(axis.text.x = element_text(angle = 90, hjust = 1,vjust=0.5)) + ylab("total steps per a day")
-  p<-p+geom_vline(xintercept = data.mean,colour="red")
-  p<-p+geom_vline(xintercept = data.median,colour="Blue")
-  p
+  p 
 ```
 
-![](./figures/Assignment2-1-1.png)<!-- -->
+![](README_files/figure-html/Assignment2-1-1.png)<!-- -->
 
-2. What  is mean total number of steps taken per day.
+2. What  is mean total number of steps taken per day
 
 
 ```r
-  ## mean and median is calculated above chunk.
-  # data.mean <-mean(data.no.miss.by.date$step.sum)
-  # data.median <-median(data.no.miss.by.date$step.sum)
+  ## calculate the mean and median.
+  data.mean<-mean(data.no.miss.by.date$step.sum)
+  data.median<-median(data.no.miss.by.date$step.sum)
 ```
 
   - the mean of steps taken per a day is 1.0766189\times 10^{4}.
@@ -153,7 +140,7 @@
    p
 ```
 
-![](./figures/Assignment3-1-1.png)<!-- -->
+![](README_files/figure-html/Assignment3-1-1.png)<!-- -->
 
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
@@ -180,25 +167,11 @@ Note that there are a number of days/intervals where there are missing values (c
 ## [1] 2304
 ```
 
-2. Devise a strategy for filling in all of the missing values in the dataset. 
-
-  The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
-
-
-    1. get the number of intervals per a day (variable : numInterval the value is 288.).
-    
-    2. get indexes of NA values.
-    
-    3. indexes redirects to specific mean of step taken in specific time interval (2nd plot).
-        
-    4. fill the missing steps from mean of mean of step taken in specific time interval
-
-
-3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
+2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 
 
 ```r
- # get the number of intervals
+  # get the number of intervals
   numInterval<-dim(data.no.miss.by.interval)[1]
   
   new.impute.mean <- data
@@ -208,6 +181,7 @@ Note that there are a number of days/intervals where there are missing values (c
   na.index<-ifelse(na.index==0,numInterval,na.index)
   
   # compare the length of two vector
+  
   length(na.index)==sum(nacols)
 ```
 
@@ -217,10 +191,13 @@ Note that there are a number of days/intervals where there are missing values (c
 
 ```r
   # now we can impute missing values using na.index. 
-  
-  
-  
-    new.impute.mean[nacols,]$steps <- data.no.miss.by.interval[na.index,]$mean
+```
+
+3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
+
+
+```r
+  new.impute.mean[nacols,]$steps <- data.no.miss.by.interval[na.index,]$mean
   
   # check missing
   sum(is.na(new.impute.mean))
@@ -239,14 +216,12 @@ Note that there are a number of days/intervals where there are missing values (c
   data.no.miss.by.date.impute<-new.impute.mean %>% group_by(date) %>% summarize(step.sum=sum(steps))
 
   require(ggplot2)
-  p<-ggplot(data.no.miss.by.date.impute,aes(step.sum)) + geom_histogram(binwidth=1000,fill="grey49") + theme_bw(base_size=12)
-  p<-p+ theme(axis.text.x = element_text(angle = 90, hjust = 1,vjust=0.5)) + ylab("total steps per a day")
-  p<-p+geom_vline(xintercept = data.mean,colour="red")
-  p<-p+geom_vline(xintercept = data.median,colour="Blue")
+  p<-ggplot(data.no.miss.by.date.impute,aes(date,step.sum)) + geom_bar(stat="identity",width=1) + theme_bw(base_size=10)
+  p<-p+ theme(axis.text.x = element_text(angle = 90, hjust = 1,vjust=.5)) + xlab("total steps taken")
   p
 ```
 
-![](./figures/Assignment4-4-1.png)<!-- -->
+![](README_files/figure-html/Assignment4-4-1.png)<!-- -->
 
 ```r
   ## calculate the mean and median.
@@ -297,4 +272,4 @@ For this part the weekdays() function may be of some help here. Use the dataset 
    p
 ```
 
-![](./figures/Assignment5-2-1.png)<!-- -->
+![](README_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
